@@ -1,6 +1,9 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
+// Get data from cities.js
+let cityData = cities;
+
 // Create the map object with a center and zoom level.
 /// We'll change the geographical center of the map to the approximate geographical center of the United States.
 /// The setView() method sets the view of the map with a geographical center, where the first coordinate is latitude (40.7) and the second is longitude (-94.5). 
@@ -13,18 +16,25 @@ let map = L.map("mapid", {
     zoom: 4
   });
 
-//  Add a marker to the map for Los Angeles, California.
-let marker = L.marker([34.0522, -118.2437]).addTo(map);
+// Create an orange circle popup marker for each city, with a lineweight of 4, a radius where the population number is decreased by 200,000
 
-/// Create a light-yellow circle with black lines indicating a 300-meter radius of Central Los Angeles on a dark map.
-/// Colors: https://www.color-hex.com/color/fff2cc
-L.circleMarker([34.0522, -118.2437], {
-  color: 'black',
-  fillcolor: '#ffd966',
-  fillOpacity: 0.6,
-  radius: 300
-}).addTo(map);
-
+// Iterate through the array
+// Loop through the cities array and create one marker for each city.
+cityData.forEach(function(city) {
+  console.log(city)
+  // Add the location of each city to the map when you iterate through the cities array.
+  // Get the coordinates of each city by adding city.location
+  // Change the marker for each city to a circle that has a radius equivalent to the city's population.
+  L.circleMarker(city.location, {
+    radius: (city.population - 200000)/100000,
+    color: 'yellow',
+    fillcolor: '#ffd966',
+    fillOpacity: 0.3,
+  })
+  // Adding a Popup to the marker, and format the population with a thousands separator by using the toLocaleString() method
+  .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population " + city.population.toLocaleString() + "</h3>")
+  .addTo(map);
+ });
 
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
