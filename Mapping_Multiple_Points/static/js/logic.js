@@ -16,17 +16,28 @@ let map = L.map("mapid", {
     zoom: 4
   });
 
+// Create an orange circle popup marker for each city, with a lineweight of 4, a radius where the population number is decreased by 200,000
+
 // Iterate through the array
 // Loop through the cities array and create one marker for each city.
 cityData.forEach(function(city) {
   console.log(city)
   // Add the location of each city to the map when you iterate through the cities array.
   // Get the coordinates of each city by adding city.location
-  L.marker(city.location).addTo(map);
+  // Change the marker for each city to a circle that has a radius equivalent to the city's population.
+  L.circleMarker(city.location, {
+    radius: (city.population - 200000)/100000,
+    color: 'yellow',
+    fillcolor: '#ffd966',
+    fillOpacity: 0.3,
+  })
+  // Adding a Popup to the marker, and format the population with a thousands separator by using the toLocaleString() method
+  .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population " + city.population.toLocaleString() + "</h3>")
+  .addTo(map);
  });
 
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
