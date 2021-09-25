@@ -1,6 +1,9 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
+// Get data from cities.js
+let cityData = cities;
+
 // Create the map object with a center and zoom level.
 /// We'll change the geographical center of the map to the approximate geographical center of the United States.
 /// The setView() method sets the view of the map with a geographical center, where the first coordinate is latitude (40.7) and the second is longitude (-94.5). 
@@ -13,21 +16,17 @@ let map = L.map("mapid", {
     zoom: 4
   });
 
-//  Add a marker to the map for Los Angeles, California.
-let marker = L.marker([34.0522, -118.2437]).addTo(map);
-
-/// Create a light-yellow circle with black lines indicating a 300-meter radius of Central Los Angeles on a dark map.
-/// Colors: https://www.color-hex.com/color/fff2cc
-L.circleMarker([34.0522, -118.2437], {
-  color: 'black',
-  fillcolor: '#ffd966',
-  fillOpacity: 0.6,
-  radius: 300
-}).addTo(map);
-
+// Iterate through the array
+// Loop through the cities array and create one marker for each city.
+cityData.forEach(function(city) {
+  console.log(city)
+  // Add the location of each city to the map when you iterate through the cities array.
+  // Get the coordinates of each city by adding city.location
+  L.marker(city.location).addTo(map);
+ });
 
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
